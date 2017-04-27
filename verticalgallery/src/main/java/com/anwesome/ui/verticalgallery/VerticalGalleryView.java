@@ -17,12 +17,15 @@ public class VerticalGalleryView extends View {
     private List<GalleryItem> galleryItems = new ArrayList<>();
     private List<Indicator> indicators = new ArrayList<>();
     private int h ,maxH = 0;
-    private int time = 0;
+    private int time = 0,index = 0;
     private Screen screen = new Screen();
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private AnimationHandler animationHandler = new AnimationHandler();
+    private GestureDetector gestureDetector;
     public VerticalGalleryView(Context context,List<GalleryItem> galleryItems) {
         super(context);
         this.galleryItems = galleryItems;
+        this.gestureDetector = new GestureDetector(context,new ScreenGestureListener());
     }
     public void onDraw(Canvas canvas) {
         int w = canvas.getWidth();
@@ -53,6 +56,7 @@ public class VerticalGalleryView extends View {
             indicator.draw(canvas,paint);
         }
         time++;
+        animationHandler.animate();
     }
     public boolean onTouchEvent(MotionEvent event) {
         return true;
@@ -65,10 +69,52 @@ public class VerticalGalleryView extends View {
             return true;
         }
         public boolean onSingleTapUp(MotionEvent event) {
+            for(GalleryItem galleryItem:galleryItems) {
+                if(galleryItem.handleTap(event.getX(),event.getY())) {
+                    break;
+                }
+            }
             return true;
         }
         public boolean onFling(MotionEvent e1,MotionEvent e2,float velx,float vely) {
+            if(vely != 0) {
+                int dir = (int)(vely/Math.abs(vely));
+                animationHandler.startAnimating(dir);
+            }
             return true;
+        }
+    }
+    private class AnimationHandler {
+        private boolean isAnimated = false;
+        private int dir = 0;
+        private float prevY = 0;
+        public void animate() {
+            screen.y+=dir*h/5;
+            if(Math.abs(screen.y-prevY)>h) {
+                if(index<indicators.size()) {
+                    indicators.get(index).setSelected(false);
+                }
+                index+=dir;
+                if(index<indicators.size()) {
+                    indicators.get(index).setSelected(true);
+                }
+                dir = 0;
+            }
+            try {
+                Thread.sleep(50);
+                invalidate();
+            }
+            catch (Exception ex) {
+
+            }
+        }
+        public void startAnimating(int dir) {
+            if(!isAnimated && this.dir == 0) {
+                if((dir == -1 && index>0) || (dir == 1 && index<indicators.size()-1)) {
+                    this.dir = dir;
+                    postInvalidate();
+                }
+            }
         }
     }
 }
