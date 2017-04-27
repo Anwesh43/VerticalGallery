@@ -3,6 +3,7 @@ package com.anwesome.ui.verticalgallery;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -58,5 +59,16 @@ public class VerticalGalleryView extends View {
     }
     private class Screen {
         private float y = 0;
+    }
+    private class ScreenGestureListener extends GestureDetector.SimpleOnGestureListener {
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+        public boolean onSingleTapUp(MotionEvent event) {
+            return true;
+        }
+        public boolean onFling(MotionEvent e1,MotionEvent e2,float velx,float vely) {
+            return true;
+        }
     }
 }
