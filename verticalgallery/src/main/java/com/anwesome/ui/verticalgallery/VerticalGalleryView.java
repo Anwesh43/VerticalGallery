@@ -72,7 +72,7 @@ public class VerticalGalleryView extends View {
         }
         public boolean onSingleTapUp(MotionEvent event) {
             for(GalleryItem galleryItem:galleryItems) {
-                if(galleryItem.handleTap(event.getX(),event.getY())) {
+                if(galleryItem.handleTap(event.getX(),event.getY()-screen.y)) {
                     break;
                 }
             }

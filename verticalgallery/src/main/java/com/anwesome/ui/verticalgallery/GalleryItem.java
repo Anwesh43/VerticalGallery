@@ -5,14 +5,16 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-
 /**
  * Created by anweshmishra on 27/04/17.
  */
 public class GalleryItem {
     private Bitmap bitmap;
     private String title;
-    private float x = 0,y,w,h;
+    private float x = 0,y,w,h; private OnClickListener onClickListener;
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
     public void setDimension(float x,float y,float w,float h) {
         this.x = x;
         this.y = y;
@@ -32,7 +34,7 @@ public class GalleryItem {
         canvas.translate(x,y);
         canvas.save();
         Path path = new Path();
-        path.addRoundRect(new RectF(0,0,7*w/10,7*h/10),Math.min(w,h),Math.min(w,h)/10, Path.Direction.CCW);
+        path.addRoundRect(new RectF(0,0,7*w/10,7*h/10),Math.max(w,h)/10,Math.max(w,h)/10, Path.Direction.CCW);
         canvas.clipPath(path);
         canvas.drawBitmap(bitmap,0,0,paint);
         canvas.restore();
@@ -42,6 +44,9 @@ public class GalleryItem {
     }
     public boolean handleTap(float x,float y) {
         boolean condition =  x>=this.x && x<=this.x+w && y>=this.y && y<=this.y+h;
+        if(condition && onClickListener!=null) {
+            onClickListener.onClick();
+        }
         return condition;
     }
     public int hashCode() {

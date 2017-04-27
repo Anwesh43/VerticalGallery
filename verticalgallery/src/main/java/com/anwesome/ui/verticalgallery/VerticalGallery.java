@@ -16,9 +16,11 @@ public class VerticalGallery {
     public VerticalGallery(Activity activity) {
         this.activity = activity;
     }
-    public void addGalleryItem(Bitmap bitmap,String title) {
+    public void addGalleryItem(Bitmap bitmap,String title,OnClickListener onClickListener) {
         if(verticalGalleryView == null) {
-            galleryItems.add(new GalleryItem(bitmap,title));
+            GalleryItem galleryItem = new GalleryItem(bitmap,title);
+            galleryItem.setOnClickListener(onClickListener);
+            galleryItems.add(galleryItem);
         }
     }
     public void show() {
