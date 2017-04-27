@@ -2,6 +2,7 @@ package com.anwesome.ui.verticalgallery;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -28,6 +29,7 @@ public class VerticalGalleryView extends View {
         this.gestureDetector = new GestureDetector(context,new ScreenGestureListener());
     }
     public void onDraw(Canvas canvas) {
+        canvas.drawColor(Color.BLACK);
         int w = canvas.getWidth();
         h = canvas.getHeight();
         if(time == 0) {
