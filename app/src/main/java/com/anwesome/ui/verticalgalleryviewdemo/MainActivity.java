@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.anwesome.ui.verticalgallery.OnClickListener;
 import com.anwesome.ui.verticalgallery.VerticalGallery;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +23,12 @@ public class MainActivity extends AppCompatActivity {
         }
         for(int i=0;i<images.length;i++) {
             final String title = titles[i];
-            verticalGallery.addGalleryItem(bitmaps[i],title);
+            verticalGallery.addGalleryItem(bitmaps[i], title, new OnClickListener() {
+                @Override
+                public void onClick() {
+                    Toast.makeText(MainActivity.this, title + " is clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         verticalGallery.show();
     }
