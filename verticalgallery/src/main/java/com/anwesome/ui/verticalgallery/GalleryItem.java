@@ -3,6 +3,8 @@ package com.anwesome.ui.verticalgallery;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
 
 /**
  * Created by anweshmishra on 27/04/17.
@@ -28,9 +30,14 @@ public class GalleryItem {
     public void draw(Canvas canvas, Paint paint) {
         canvas.save();
         canvas.translate(x,y);
+        canvas.save();
+        Path path = new Path();
+        path.addRoundRect(new RectF(0,0,7*w/10,7*h/10),Math.min(w,h),Math.min(w,h)/10, Path.Direction.CCW);
+        canvas.clipPath(path);
         canvas.drawBitmap(bitmap,0,0,paint);
+        canvas.restore();
         paint.setTextSize(h/20);
-        canvas.drawText(title,w/2-paint.measureText(title)/2,3*h/4,paint);
+        canvas.drawText(title,7*w/20-paint.measureText(title)/2,3*h/4+paint.getTextSize()/2,paint);
         canvas.restore();
     }
     public boolean handleTap(float x,float y) {

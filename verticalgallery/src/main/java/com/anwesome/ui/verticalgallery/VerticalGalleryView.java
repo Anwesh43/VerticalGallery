@@ -33,16 +33,16 @@ public class VerticalGalleryView extends View {
         int w = canvas.getWidth();
         h = canvas.getHeight();
         if(time == 0) {
-            float y = 0;
+            float y = h/10;
             for(GalleryItem galleryItem:galleryItems) {
-                galleryItem.setDimension(0,y,w,h);
+                galleryItem.setDimension(w/8,y,w,h);
                 y += h;
             }
-            float indX = 4*w/5,indGap = Math.min(w,h)/20,indY = h/2 - (galleryItems.size()/2)*indGap;
+            float indX = 17*w/20,indGap = Math.min(w,h)/60,indY = h/2 - (galleryItems.size()/2)*indGap;
             for(int i=0;i<galleryItems.size();i++) {
-                Indicator indicator = new Indicator(indX,indY,indGap);
+                Indicator indicator = new Indicator(indX+w/30,indY,indGap);
                 indicators.add(indicator);
-                y += 2*indGap;
+                indY += 3*indGap;
                 if(i == 0) {
                     indicator.setSelected(true);
                 }
@@ -61,7 +61,7 @@ public class VerticalGalleryView extends View {
         animationHandler.animate();
     }
     public boolean onTouchEvent(MotionEvent event) {
-        return true;
+        return gestureDetector.onTouchEvent(event);
     }
     private class Screen {
         private float y = 0;
@@ -81,7 +81,7 @@ public class VerticalGalleryView extends View {
         public boolean onFling(MotionEvent e1,MotionEvent e2,float velx,float vely) {
             if(vely != 0) {
                 int dir = (int)(vely/Math.abs(vely));
-                animationHandler.startAnimating(dir);
+                animationHandler.startAnimating(-dir);
             }
             return true;
         }
@@ -91,16 +91,19 @@ public class VerticalGalleryView extends View {
         private int dir = 0;
         private float prevY = 0;
         public void animate() {
-            screen.y+=dir*h/5;
+            screen.y-=dir*h/5;
             if(Math.abs(screen.y-prevY)>h) {
                 if(index<indicators.size()) {
                     indicators.get(index).setSelected(false);
                 }
                 index+=dir;
-                if(index<indicators.size()) {
+                if(index>= 0 && index<indicators.size()) {
                     indicators.get(index).setSelected(true);
                 }
+                screen.y = prevY-dir*h;
                 dir = 0;
+                prevY = screen.y;
+
             }
             try {
                 Thread.sleep(50);

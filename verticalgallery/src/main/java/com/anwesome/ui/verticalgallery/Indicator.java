@@ -21,7 +21,7 @@ public class Indicator {
     }
     public void draw(Canvas canvas, Paint paint) {
         if(!selected) {
-            paint.setColor(Color.parseColor("#E0E0E0"));
+            paint.setColor(Color.parseColor("#AABDBDBD"));
         }
         else {
             paint.setColor(Color.WHITE);
